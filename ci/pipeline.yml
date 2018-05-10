@@ -131,3 +131,16 @@ jobs:
     params:
       manifest: pal-tracker/manifest-timesheets.yml
       path: timesheets-artifacts/timesheets-server*.jar
+- name: migrate-databases
+  plan:
+  - get: pal-tracker
+    passed: [build]
+    trigger: true
+  - task: migrate databases
+    file: pal-tracker/ci/migrate.yml
+    params:
+      CF_API_URL: {{cf-api-url}}
+      CF_USERNAME: {{cf-username}}
+      CF_PASSWORD: {{cf-password}}
+      CF_ORG: {{cf-org}}
+      CF_SPACE: sandbox
